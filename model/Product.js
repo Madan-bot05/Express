@@ -21,7 +21,7 @@ const Product=sequelize.define('Product',{
     },
 
     description:{
-        type:DataTypes.INTEGER,
+        type:DataTypes.STRING,
         allowNull:false
     },
 });

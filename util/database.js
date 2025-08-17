@@ -8,7 +8,7 @@ import { Sequelize } from 'sequelize';
 // using it separately from Sequelize.
 
 // Create a new Sequelize instance.
-const sequelize = new Sequelize('express1', 'root', 'Madan983', {
+const sequelize = new Sequelize('express', 'root', 'Madan983', {
     host: 'localhost',
     dialect: 'mysql', // Specify the database dialect.
     logging: false
