@@ -1,11 +1,16 @@
 // This is the main Express application file.
 import express from "express";
+import cors from "cors";
+import { corsOptions } from "./config/cors.js"; // <-- your CORS config
 import sequelize from "./util/database.js"; // Import the database connection.
 import Product from "./model/Product.js"; // Import the Product model.
-import router from "./routes/products.js";
+
+// New imports for authentication
+import authRoutes from "./routes/auth.js";
+import userRoutes from "./routes/user.js";
+import { authenticateToken, restrictTo } from "./middleware/authMiddleware.js";
 
 // --- SEQUELIZE SYNC ---
-// Call .sync() on the imported sequelize instance to create the tables.
 sequelize
   .sync({
     force: false, // Set to true to drop and re-create tables on startup.
@@ -15,18 +20,31 @@ sequelize
   })
   .catch((err) => console.log("Error syncing database:", err));
 
-// --- EXPRESS.JS SETUP ---
 const app = express();
-const PORT = 3000;
+const PORT = 2020;
 
-app.use(express.json());
+// ===== Middleware =====
+app.use(cors(corsOptions));       // ✅ Enable CORS for React
+app.use(express.json());          // ✅ Parse JSON bodies
+app.use(express.urlencoded({ extended: true })); // Optional (form data)
 
-app.use('/api',router)
+// ===== Routes =====
+// Public routes for authentication
+app.use("/auth", authRoutes);
 
-// --- ROUTES ---
-// Route to create a new product.
+// Protected routes requiring JWT
+app.use("/api", authenticateToken, userRoutes);
 
-// Start the server.
+// Admin-specific routes
+app.get(
+  "/api/admin/dashboard",
+  authenticateToken,
+  restrictTo("ADMIN"),
+  (req, res) => {
+    res.status(200).json({ message: "Welcome to the Admin Dashboard!" });
+  }
+);
+
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`🚀 Server is running on http://localhost:${PORT}`);
 });
