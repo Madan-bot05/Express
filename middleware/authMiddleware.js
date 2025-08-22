@@ -3,7 +3,6 @@ import { JWT_HEADER, SECRET_KEY } from '../config/jwt.js';
 
 /**
  * Middleware to authenticate requests using a JWT token.
- * Works for both "Bearer <token>" and raw "<token>" in Authorization header.
  */
 export const authenticateToken = (req, res, next) => {
   const authHeader = req.header(JWT_HEADER);

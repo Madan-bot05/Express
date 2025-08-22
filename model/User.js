@@ -23,28 +23,27 @@ const User = sequelize.define('User', {
   email: {
     type: DataTypes.STRING,
     allowNull: false,
-    unique: true, // Ensures email is unique
+    unique: true, 
     validate: {
       isEmail: true
     }
   },
   mobile: {
     type: DataTypes.STRING,
-    allowNull: true // Assuming mobile is optional
+    allowNull: true 
   },
   role: {
     type: DataTypes.STRING,
     allowNull: false,
-    defaultValue: 'USER' // A default role is a good practice
+    defaultValue: 'USER' 
   },
   createdAt: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW
   }
 }, {
-  tableName: 'users', // Matches the table name in your Java code
+  tableName: 'users', 
   timestamps: false // We're handling the createdAt field manually, so we'll disable Sequelize's automatic timestamps
 });
 
-// Step 3: Export the model
 export default User

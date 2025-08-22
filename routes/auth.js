@@ -19,13 +19,11 @@ router.post('/signup', async (req, res) => {
       email,
       password: hashedPassword,
       mobile,
-      role: `${role.toUpperCase()}` || 'USER' 
+      role: `${role? role.toUpperCase() : 'USER'}` 
     });
-    
-    // Generate token
-    const token = generateToken(newUser);
 
-    // ✅ Match Spring Boot response format
+    //Token generation
+    const token = generateToken(newUser);
     res.status(201).json({
       jwt: token,
       user: {
@@ -57,8 +55,6 @@ router.post('/signin', async (req, res) => {
     }
     
     const token = generateToken(user);
-
-    // ✅ Match Spring Boot response format
     res.status(200).json({
       jwt: token,
       user: {
